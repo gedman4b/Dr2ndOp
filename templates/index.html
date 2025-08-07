@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClinicalTrials API</title>
+</head>
+<body>
+    <h1>Welcome to the ClinicalTrials API</h1>
+    <p>This API provides access to clinical trial data from ClinicalTrials.gov.</p>
+    <form id="conditionForm">
+        <label for="conditionInput">Condition:</label>
+        <input type="text" id="conditionInput" name="condition" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="result"></div>
+    <script>
+    document.getElementById('conditionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Event handler triggered: you can add any additional actions here if needed
+        // For example, show a loading indicator or disable the button
+        const condition = document.getElementById('conditionInput').value;
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = 'Loading...'; // Show loading message
+        fetch('/studies?condition=' + encodeURIComponent(condition), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+            // Display response data on the page
+            let resultDiv = document.getElementById('result');
+           
+            resultDiv.innerHTML = data
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            resultDiv.innerHTML = error;
+            });
+    });
+    </script>
+</body>
+</html>
